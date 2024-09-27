@@ -1,10 +1,11 @@
 // ref: https://mui.com/material-ui/integrations/nextjs/
 import type { Metadata } from "next";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
-import "./globals.css";
+import "./styles.scss";
 import { ThemeProvider } from '@mui/material/styles';
 import theme from "./theme";
 import { Container } from '@mui/material';
+import { NarBar } from "@/component/NarBar";
 
 
 export const metadata: Metadata = {
@@ -22,7 +23,8 @@ export default function RootLayout({
       <body>
           <AppRouterCacheProvider>
             <ThemeProvider theme={theme}>
-              <Container maxWidth="xl">
+              <NarBar/>
+              <Container maxWidth="lg">
                 {children}
               </Container>
             </ThemeProvider>         

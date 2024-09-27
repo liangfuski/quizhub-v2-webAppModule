@@ -9,12 +9,17 @@ export default function QuizInfoCard({ title, description, author }: quiz) {
             border: "1px solid transparent", 
             transition: "border-color 0.3s", 
             "&:hover": {
-              borderColor: `primary.light`, 
-              boxShadow: "none"
-            }}}>
+                borderColor: `primary.light`, 
+                boxShadow: "none",
+                ".last": {
+                    color: "primary.light"
+                }
+            },
+            }}>
             <CardContent >
                 <Typography 
-                    variant="h5" 
+                    variant="h5"
+                    // noWrap 
                     sx={{color: "text.primary", mb:1}}>
                     {title}
                 </Typography>
@@ -25,8 +30,12 @@ export default function QuizInfoCard({ title, description, author }: quiz) {
                 <Box
                     sx={{display: "flex", justifyContent: "flex-end", mt: 3}}>
                     <Typography 
-                        variant="body1" 
-                        sx={{color: "primary.main"}}>
+                        variant="body1"
+                        className="last" 
+                        sx={{
+                            color: "primary.dark",
+                            }}
+                        >
                         By {author}
                     </Typography>
                 </Box>
