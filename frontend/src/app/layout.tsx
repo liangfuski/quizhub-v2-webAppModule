@@ -6,7 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import theme from "./theme";
 import { Container } from '@mui/material';
 import { NarBar } from "@/component/NarBar";
-
+import  ThemeContextProvider from "@/context/ThemeContext"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,12 +22,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
           <AppRouterCacheProvider>
-            <ThemeProvider theme={theme}>
+            <ThemeContextProvider>
               <NarBar/>
               <Container maxWidth="lg">
                 {children}
               </Container>
-            </ThemeProvider>         
+            </ThemeContextProvider>         
           </AppRouterCacheProvider>
       </body>
     </html>
