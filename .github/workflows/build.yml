@@ -72,7 +72,7 @@ jobs:
       # Convert repository owner to lowercase
       - name: Set lower case owner name
         run: |
-          echo "REPOSITORY_OWNER_LOWER=${{ github.repository_owner,, }}" >> $GITHUB_ENV
+          echo "REPOSITORY_OWNER_LOWER=${{ github.repository_owner }}" >> $GITHUB_ENV
 
       # Set backend image tag name
       - name: Set backend image tag name
