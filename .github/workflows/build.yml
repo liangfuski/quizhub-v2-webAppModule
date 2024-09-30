@@ -40,15 +40,19 @@ jobs:
       # Get the repo's code
       - name: Checkout
         uses: actions/checkout@v3
-      # Update the html file inside the repo
-      #   - name: Update the html file inside the repo
-      #     run: |
-      #       sed -i "s/VERSION_PLACE_HOLDER/${{ needs.create-release.outputs.version }}/g" ./src/index.html
-      #       cat ./src/index.html
-      # https://github.com/docker/setup-qemu-action
+
+      # Optional: Update the html file inside the repo
+      # Uncomment if you need this step
+      # - name: Update the html file inside the repo
+      #   run: |
+      #     sed -i "s/VERSION_PLACE_HOLDER/${{ needs.create-release.outputs.version }}/g" ./src/index.html
+      #     cat ./src/index.html
+
+      # Set up QEMU for multi-architecture support
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-      # https://github.com/docker/setup-buildx-action
+
+      # Set up Docker Buildx
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
@@ -56,16 +60,50 @@ jobs:
       - name: Available platforms
         run: echo ${{ steps.buildx.outputs.platforms }}
 
+      # Log in to GitHub Container Registry (GHCR)
       - name: Login to GHCR
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
 
+      # Convert repository owner to lowercase
       - name: Set lower case owner name
         run: |
-          echo "REPOSITORY_OWNER_LOWER=${OWNER,,}" >> $GITHUB_ENV
-        env:
-          OWNER: ${{ github.repository_owner }}
+          echo "REPOSITORY_OWNER_LOWER=${{ github.repository_owner,, }}" >> $GITHUB_ENV
+
+      # Set backend image tag name
+      - name: Set backend image tag name
+        run: echo "BACKEND_IMAGE_TAG=ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/quizhub-backend:${{ needs.create-release.outputs.version }}" >> $GITHUB_ENV
+
+      # Build and push Backend Docker image
+      - name: Build and push Backend Image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./backend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.BACKEND_IMAGE_TAG }}
+
+      # Run backend container using the built image
+      - name: Run backend container
+        run: |
+          docker run -d -p 3001:80 ${{ env.BACKEND_IMAGE_TAG }}
+      - name: Wait for backend to be ready
+        run: |
+          until curl -s http://localhost:3001/api/health; do
+              echo "Waiting for backend to be ready..."
+              sleep 5
+          done
+      # Build and push Frontend Docker image
+      - name: Build and push Frontend Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/quizhub-frontend:${{ needs.create-release.outputs.version }}
