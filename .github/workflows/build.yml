@@ -2,7 +2,8 @@ name: NodeJS Build Multiple Architectures
 
 on:
   push:
-    branches: [main]
+    branches: [master]
+  workflow_dispatch:
 
 jobs:
   create-release:
