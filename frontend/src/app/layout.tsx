@@ -2,8 +2,6 @@
 import type { Metadata } from "next";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import "./styles.scss";
-import { ThemeProvider } from '@mui/material/styles';
-import theme from "./theme";
 import { Container } from '@mui/material';
 import { NarBar } from "@/component/NarBar";
 import  ThemeContextProvider from "@/context/ThemeContext"

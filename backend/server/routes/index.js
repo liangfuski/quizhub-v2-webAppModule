@@ -14,8 +14,8 @@ router.get('/logout', indexControllor.performLogout)
 
 /* GET home page. */
 // router.get('/', indexControllor.epic);
-router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './frontend/build/index.html'))
-})
+// router.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, './frontend/build/index.html'))
+// })
 
 module.exports = router;

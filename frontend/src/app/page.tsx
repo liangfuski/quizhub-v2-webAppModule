@@ -1,6 +1,5 @@
 import { getQuizList } from "@/api/route";
-import { Card, Box } from "@mui/material";
-import Grid from '@mui/material/Grid2';
+import { Box } from "@mui/material";
 import QuizInfoCard from "@/component/QuizInfoCard";
 
 export default async function Home() {

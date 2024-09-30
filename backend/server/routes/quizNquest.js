@@ -23,6 +23,12 @@ router.get('/delete-question/:id', qNqController.deleteQuestion); // input a que
 router.get('/delete-quiz/:id', qNqController.deleteQuiz); // input a quiz ID and return message
 
 
+// Health check endpoint
+router.get('/health', (req, res) => {
+    console.log("HEALTH CHECKED IS CONDUCTED")
+    res.status(200).json({ status: 'OK' });
+  });
+
 module.exports = router;
 
 /* POST Route for processing the Add page - CREATE Operation */

@@ -51,7 +51,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../../public'))); // exposing the ./public folder for the express server. As such, when we set the file paths inside views, the default base path is set.
 app.use(express.static(path.join(__dirname, '../../node_modules'))) // week3 router video 15:40
-app.use(express.static("./frontend/build"))  // the path inside the docker container; please refer to the Dockerfile
 app.use(cors());
 
 // setup express session

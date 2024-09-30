@@ -15,7 +15,7 @@ import { keyframes } from '@emotion/react';
 import { SxProps } from '@mui/system';
 import { useContext } from "react";
 import { MUIWrapperContext } from "../context/ThemeContext";
-import Switch, { SwitchProps } from '@mui/material/Switch';
+import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 import { ThemeColor } from '@/Constant';
 
@@ -141,7 +141,7 @@ export function NarBar() {
         setAnchorElNav(event.currentTarget);
     }
     
-    const handleCloseNavMenu = (event: MouseEvent<HTMLElement>): void => {
+    const handleCloseNavMenu = (): void => {
         setAnchorElNav(null);
     }
 
