@@ -77,7 +77,7 @@ const nextConfig = {
 export default nextConfig;
 ```
 
-The docker-compose file is expected to fulfill two function:
+The docker-compose file is expected to fulfill two functions:
 
 1. The "depend on" clause ensures the backend containers is running when the frontend image building process starts
 2. The frontend image can call the backend server through the domain name "backend"

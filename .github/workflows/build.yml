@@ -1,0 +1,32 @@
+name: NodeJS Build Multiple Architectures
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  create-release:
+    name: Create Release and Tag Number
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version_number.outputs.version }}
+    steps:
+      - name: Set Time Zone
+        uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "America/Toronto"
+      - name: Generate Version Number
+        run: |
+          echo "CUSTOMED_VERSION_NUMBER=v$(date +"%Y%m%d_%H%M")" >> $GITHUB_ENV
+      - name: Version Number Output
+        id: version_number
+        run: |
+          echo "Printing Customed Version Value: ${{ env.CUSTOMED_VERSION_NUMBER }}"
+          echo "version=${{ env.CUSTOMED_VERSION_NUMBER }}" >> $GITHUB_OUTPUT
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.CUSTOMED_VERSION_NUMBER }}
+          token: ${{ secrets.CONTAINER_REGISTRY_TOKEN }}
