@@ -41,10 +41,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       # Update the html file inside the repo
-      - name: Update the html file inside the repo
-        run: |
-          sed -i "s/VERSION_PLACE_HOLDER/${{ needs.create-release.outputs.version }}/g" ./src/index.html
-          cat ./src/index.html
+      #   - name: Update the html file inside the repo
+      #     run: |
+      #       sed -i "s/VERSION_PLACE_HOLDER/${{ needs.create-release.outputs.version }}/g" ./src/index.html
+      #       cat ./src/index.html
       # https://github.com/docker/setup-qemu-action
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
