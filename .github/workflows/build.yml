@@ -80,7 +80,10 @@ jobs:
       # Set backend image tag name
       - name: Set backend image tag name
         id: backend
-        run: echo "BACKEND_IMAGE_TAG=ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/quizhub-backend:${{ needs.create-release.outputs.version }}" >> $GITHUB_ENV
+        run: |
+          BACKEND_IMAGE_TAG="ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/quizhub-backend:${{ needs.create-release.outputs.version }}"
+          echo "BACKEND_IMAGE_TAG=$BACKEND_IMAGE_TAG" >> $GITHUB_ENV
+          echo "::set-output name=BACKEND_IMAGE_TAG::$BACKEND_IMAGE_TAG"}
 
       # Build and push Backend Docker image
       - name: Build and push Backend Image
@@ -106,7 +109,10 @@ jobs:
       # Set frontend image tag name
       - name: Set frontend image tag name
         id: frontend
-        run: echo "FRONTEND_IMAGE_TAG=ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/quizhub-frontend:${{ needs.create-release.outputs.version }}" >> $GITHUB_ENV
+        run: |
+          FRONTEND_IMAGE_TAG="ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/quizhub-frontend:${{ needs.create-release.outputs.version }}"
+          echo "FRONTEND_IMAGE_TAG=$FRONTEND_IMAGE_TAG" >> $GITHUB_ENV
+          echo "::set-output name=FRONTEND_IMAGE_TAG::$FRONTEND_IMAGE_TAG"}
 
       # Build and push Frontend Docker image
       - name: Build and push Frontend Image
