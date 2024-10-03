@@ -209,3 +209,7 @@ start frondend (Angular) server
 > cd frontend
 > npm install <------ (for the first time only)
 > npm run start
+
+#Terraform
+
+> terraform apply -var-file="variables.tfvars

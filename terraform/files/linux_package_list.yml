@@ -1,0 +1,7 @@
+#cloud-config
+packages_update: true
+packages_upgrade: true
+packages:
+%{ for item in packages ~}
+  - ${item}
+%{ endfor ~}

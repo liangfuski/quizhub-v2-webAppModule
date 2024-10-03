@@ -1,0 +1,79 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
+locals {
+  tags = {
+    LastModification = formatdate("YYYY-MM-DD", timestamp())
+    Owner            = "AWS Terraform Automation"
+    Purpose          = "New Created VM to deploy new app"
+    Environment      = "Production"
+    Name             = "Quizhub Web App"
+  }
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
+resource "aws_instance" "vm1" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t3.micro" # t2.micro | t2.small | t2.medium
+  vpc_security_group_ids = [aws_security_group.websg.id]
+  key_name               = aws_key_pair.key_pair1.key_name
+  user_data_base64       = local.is_cloudinit_config_enabled ? data.template_cloudinit_config.config[0].rendered : null
+  tags                   = local.tags
+}
+
+resource "aws_security_group" "websg" {
+  name = "web-sg01"
+  ingress {
+    protocol         = "tcp"
+    from_port        = 80
+    to_port          = 80
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+  ingress {
+    protocol         = "tcp"
+    from_port        = 443
+    to_port          = 443
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+  ingress {
+    protocol         = "tcp"
+    from_port        = 22
+    to_port          = 22
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+}
+
+resource "aws_key_pair" "key_pair1" {
+  key_name   = "id_rsa"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDH/O28bMkocODoyURVkwdkLHcC+Bmoz+Lq4kwel7PwBcJTIVz7NdgaHRy/RxHxz2/3XChPjPuLSMb+bziZgp5f6WMPl6V8L0swiHQo3WcjjIyBB0qKTUEjVJQkfQvSJQsWO2JD2r+NFlueEITPNaIat6CZqVOMnJwN4GI63X/xZWC5WGno5V9HiPU6GilYOZMcVNStz1SQbF2PYor8ItIa+Z/K2jiyEkxuyBkzKcxylxRgniC8BotIKaYdy5Jt+BOWQzdE+70mCP5i5nNLwhqquMsdeFs3dNdDU5HQWrjvfhXs6Ygv739CGokykCQa93o4Fa8bUKk6Q/wXS+Z8Rfkfm7NylDOnuokDD4sTAuuPq2D9HtFChuAsuBDj4hjKhTH1cTL/BMOR1KiFT2kazku5TRQYqZFKI2Y1l8SgNWhw+H62jdKtSdraZJt7us2w20CldhMhzk8JH63LLwyJdvD+EG1Rn2QSdAMx38FGWQEFeASaggh2foUm5m3LDyyhMmM= liangfuski@liangfuski-ThinkPad-T490"
+}
+
+output "instance_ips" {
+  value = aws_instance.vm1.public_ip
+}
