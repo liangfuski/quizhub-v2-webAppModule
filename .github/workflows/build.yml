@@ -104,7 +104,7 @@ jobs:
           done
 
       # Set frontend image tag name
-      - name: Set backend image tag name
+      - name: Set frontend image tag name
         id: frontend
         run: echo "FRONTEND_IMAGE_TAG=ghcr.io/${{ env.REPOSITORY_OWNER_LOWER }}/quizhub-frontend:${{ needs.create-release.outputs.version }}" >> $GITHUB_ENV
 
@@ -130,8 +130,9 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           script: |
+            docker stop $(docker ps -a -q)
             docker system prune -af
-            echo "removing all the previous images and containers"{{
+            echo "removing all the previous images and containers"
             docker pull ${{ needs.build-multi-arch.outputs.backend_image_url }}
             docker pull ${{ needs.build-multi-arch.outputs.frontend_image_url }}
             docker container run -p 3001:80 ${{ needs.build-multi-arch.outputs.backend_image_url }}
