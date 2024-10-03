@@ -124,15 +124,15 @@ jobs:
     needs: [create-release, build-multi-arch]
     steps:
       - name: Execute SSH commands into the VM
-        uses: fifsky/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          command: |
+          host: ${{ secrets.SERVER_IP_VP }}
+          username: ubuntu
+          key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          script: |
             docker system prune -af
             echo "removing all the previous images and containers"{{
             docker pull ${{ needs.build-multi-arch.outputs.backend_image_url }}
             docker pull ${{ needs.build-multi-arch.outputs.frontend_image_url }}
             docker container run -p 3001:80 ${{ needs.build-multi-arch.outputs.backend_image_url }}
             docker container run -p 3000:3000 ${{ needs.build-multi-arch.outputs.frontend_image_url }}
-          host: ${{ secrets.SERVER_IP_VP }}
-          user: ubuntu
-          key: ${{ secrets.SERVER_PRIVATE_KEY }}
