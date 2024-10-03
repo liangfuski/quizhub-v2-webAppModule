@@ -141,5 +141,5 @@ jobs:
             echo "removing all the previous images and containers"
             docker pull ${{ needs.build-multi-arch.outputs.backend_image_url }}
             docker pull ${{ needs.build-multi-arch.outputs.frontend_image_url }}
-            docker container run -p -d 3001:80 ${{ needs.build-multi-arch.outputs.backend_image_url }}
-            docker container run -p -d 3000:3000 ${{ needs.build-multi-arch.outputs.frontend_image_url }}
+            docker container run -d -p 3001:80 ${{ needs.build-multi-arch.outputs.backend_image_url }}
+            docker container run -d -p 3000:3000 ${{ needs.build-multi-arch.outputs.frontend_image_url }}
