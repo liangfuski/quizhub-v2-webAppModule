@@ -1,0 +1,10 @@
+@import '/src/app/styles.scss';
+
+
+h1 {
+    color: var(--mui-palette-primary-main);
+}
+
+h2 {
+    color: $secondary;
+}

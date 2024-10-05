@@ -12,8 +12,8 @@ export default function ThemeContextProvider({
 }:Readonly<{
     children: React.ReactNode
 }>) {
-
     const [mode, setMode] = useState<PaletteMode>("light");
+    console.log("mode is changed ::: ", mode)
 
     const muiWrapperUtils = useMemo(
         () => ({
@@ -43,6 +43,13 @@ export default function ThemeContextProvider({
             // },
             },
             components: {
+            MuiPaper: {
+                styleOverrides: {
+                    root: {
+                        boxShadow: "none"
+                    }
+                }
+            },
             MuiCardContent: {
                 styleOverrides: {
                 root: {
@@ -51,7 +58,14 @@ export default function ThemeContextProvider({
                     }
                 } 
                 }
-            }
+            },
+            MuiCssBaseline: {
+                styleOverrides: {
+                  body: {
+                    backgroundColor: mode === 'light' ? '#F7FCFF' : '#000000', // Set body background color
+                  },
+                },
+            },
             },
             status: {
                 danger: '#ff0000'
