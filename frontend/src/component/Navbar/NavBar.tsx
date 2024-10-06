@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import CustomButton from '../CustomButton';
 import FactoryIcon from '@mui/icons-material/Factory';
-import { keyframes } from '@emotion/react';
 import { SxProps } from '@mui/system';
 import NarbarMenu from './NavBarMenu';
 import NavbarSwtich from './NavbarSwtich';
@@ -14,7 +13,7 @@ import Link from 'next/link';
 import { ActionItem, ActionItems } from './util';
 
 
-const generateActionButtonStyle = (action: string): SxProps => {
+const generateActionButtonStyle = (): SxProps => {
     const basicStyle = { 
             my: 1, 
             color: 'white', 
@@ -97,7 +96,7 @@ export default function NavBar() {
                                 <Link href={action.path}>
                                     <CustomButton
                                         className={action.name === "AI Quiz Generation" ? 'rainbow-border' : ''} 
-                                        sx={generateActionButtonStyle(action.name)}
+                                        sx={generateActionButtonStyle()}
                                     >
                                             {action.name}
                                     </CustomButton>
