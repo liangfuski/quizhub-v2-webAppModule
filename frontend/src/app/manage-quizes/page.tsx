@@ -6,19 +6,19 @@ import TableContainer from '@mui/material/TableContainer';
 import StyledTableHead from '@/component/StyledMaterialComponent/StyledTableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { getQuizListByUserId } from '@/api/route';
-import { quiz } from '@/type';
+import { getQuizListByCondition } from '@/api/route';
+import { quiz } from '@/utils/type';
 import Box from '@mui/material/Box';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 import  IconButton from '@mui/material/IconButton'; 
 import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
-import { ThemeColor } from '@/Constant';
+import { ThemeColor } from '@/utils/Constant';
 import Link from 'next/link';
 
 export default async function ManageQuizPage() {
 
     const id = "admin";
-    const quizList = await getQuizListByUserId({ author: id });
+    const quizList = await getQuizListByCondition({ author: id });
 
     return ( 
       <TableContainer component={Paper} sx={{ mt: 10 }} elevation={1}>

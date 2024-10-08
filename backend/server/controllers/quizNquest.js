@@ -9,7 +9,17 @@ let questModel = require('../models/quest');
 module.exports.displayQuiz = (req, res) => {
     
     const author = req.query?.author;
-    const condition = req.query?.author ? {author} : {};
+    const quizId = req.query?.quizId;
+
+    let condition = {};
+
+    if (req.query.author) {
+        condition.author = author;
+    };
+
+    if (req.query.quizId) {
+        condition._id = quizId;
+    };
     
     quizModel.find(condition, (err, data) => {
       if (err) {

@@ -1,6 +1,6 @@
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
-import { ThemeColor } from '@/Constant';
+import { ThemeColor } from '@/utils/Constant';
 
 const StyleNavBarSwitch = styled(Switch)(({ theme }) => ({
     width: 62,

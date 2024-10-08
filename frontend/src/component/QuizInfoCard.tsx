@@ -1,4 +1,4 @@
-import { quiz } from "@/type"
+import { quiz } from "@/utils/type"
 import { Card, CardContent, Typography, Box } from "@mui/material";
 
 export default function QuizInfoCard({ title, description, author }: quiz) {

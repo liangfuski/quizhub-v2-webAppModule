@@ -5,7 +5,7 @@ let mongoose = require('mongoose');
 let qNqController = require('../controllers/quizNquest');
 
 
-router.get('/quiz',qNqController.displayQuiz); //return a list of quiz
+router.get('/quiz',qNqController.displayQuiz); //return a list of quiz by criteria
 
 router.post('/add-quiz',qNqController.processAddQuiz); // input quiz content and return a new quiz ID
 

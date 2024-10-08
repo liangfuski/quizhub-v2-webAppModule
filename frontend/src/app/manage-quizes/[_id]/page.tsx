@@ -1,14 +1,22 @@
-import { getQuizQuestionsByQuizId } from "@/api/route";
-
+import { getQuizQuestionsByQuizId, getQuizListByCondition } from "@/api/route";
+import { Question, Quiz } from "@/utils/type";
+import QuizManagementForm from "@/component/QuizManagementForm";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export default async function QuizEditPage({ params} : { params: { _id: string }} ) {
     const quizId = params._id;
-    const questionList = await getQuizQuestionsByQuizId({quizId})
-    console.log("called quiz::", quizId);
+    const quizResponseList: Quiz[]  = await getQuizListByCondition({ quizId });
+
+    let quizInfo: Quiz; 
+    if (quizResponseList.length != 1) {
+        throw new Error("Quiz Not Found");
+    }
+    [quizInfo] = quizResponseList; 
+
+    const questionList: Question[] = await getQuizQuestionsByQuizId({quizId})
     return (
         <div>
-            {quizId}
-            {questionList.map(ele => (<div key={quizId} style={{padding:"10px"}}>
+            <QuizManagementForm quizInfo={quizInfo} questions={questionList}/>
+            {questionList.map(ele => (<div key={ele.id} style={{padding:"10px"}}>
                 <div>{ele.id}</div>
                 <div>{ele.prompt}</div>
                 <div>{ele.answer}</div>
