@@ -7,7 +7,7 @@ import StyledTableHead from '@/component/StyledMaterialComponent/StyledTableHead
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { getQuizListByCondition } from '@/api/route';
-import { quiz } from '@/utils/type';
+import { Quiz } from '@/utils/type';
 import Box from '@mui/material/Box';
 import ModeEditOutlineTwoToneIcon from '@mui/icons-material/ModeEditOutlineTwoTone';
 import  IconButton from '@mui/material/IconButton'; 
@@ -35,7 +35,7 @@ export default async function ManageQuizPage() {
             </TableRow>
           </StyledTableHead>
           <TableBody>
-            {quizList.map((row: quiz) => (
+            {quizList.map((row: Quiz) => (
               <TableRow
                 key={row._id}
                 sx={{

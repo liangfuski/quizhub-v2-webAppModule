@@ -13,7 +13,7 @@ export default function ThemeContextProvider({
     children: React.ReactNode
 }>) {
     const [mode, setMode] = useState<PaletteMode>("light");
-    console.log("mode is changed ::: ", mode)
+    // console.log("mode is changed ::: ", mode)
 
     const muiWrapperUtils = useMemo(
         () => ({

@@ -8,8 +8,8 @@ export interface Quiz {
 
 
 export interface Question {
-    "id"?: string,
-    "quizId": string,
+    "_id"?: string,
+    "quizId"?: string,
     "prompt": string,
     "options": string[],
     "answer": number

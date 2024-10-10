@@ -1,6 +1,6 @@
 import { getQuizQuestionsByQuizId, getQuizListByCondition } from "@/api/route";
 import { Question, Quiz } from "@/utils/type";
-import QuizManagementForm from "@/component/QuizManagementForm";
+import QuizManagementForm from "@/component/QuizManagement/QuizManagementForm";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export default async function QuizEditPage({ params} : { params: { _id: string }} ) {
     const quizId = params._id;
@@ -16,15 +16,6 @@ export default async function QuizEditPage({ params} : { params: { _id: string }
     return (
         <div>
             <QuizManagementForm quizInfo={quizInfo} questions={questionList}/>
-            {questionList.map(ele => (<div key={ele.id} style={{padding:"10px"}}>
-                <div>{ele.id}</div>
-                <div>{ele.prompt}</div>
-                <div>{ele.answer}</div>
-                <div>{
-                    ele.options.join("  ") 
-                    }</div>
-            </div>)
-            )}
         </div>
     )   
 }
