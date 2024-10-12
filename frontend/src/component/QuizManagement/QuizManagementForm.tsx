@@ -10,7 +10,6 @@ import { questionsReducer } from "./QuestionsReducer"
 import QuestionEditableCard from "./QuestionEditableCard";
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined';
-import { ErrorSharp } from "@mui/icons-material";
 
 export default function QuizManagementForm({quizInfo, questions}: {quizInfo: Quiz, questions: ValidableQuestion[]}){
 
