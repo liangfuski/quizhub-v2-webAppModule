@@ -1,4 +1,4 @@
-import { ActionErrors, FieldErrors } from "./type";
+import { ActionErrors } from "./type";
 
 export function getErrorsForField(field: string, error: string): ActionErrors {
     return {

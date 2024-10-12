@@ -1,4 +1,6 @@
 import { Quiz, Question } from "../utils/type";
+import { ResponseError, postFetch } from "./postRequest";
+import { revalidateTag } from 'next/cache'
 
 const ROOT_PATH = process.env.NEXT_PUBLIC_ROOT_PATH;
 
@@ -8,7 +10,7 @@ export async function getQuizList(): Promise<Quiz[]> {
 }
 
 
-export async function getQuizListByCondition ({ author, quizId }: { author?: string, quizId?: string }): Promise<quiz[]> {
+export async function getQuizListByCondition ({ author, quizId }: { author?: string, quizId?: string }): Promise<Quiz[]> {
     const queryObj: {author ?: string, quizId ?: string} = {};
 
     if (author) {
@@ -27,4 +29,16 @@ export async function getQuizListByCondition ({ author, quizId }: { author?: str
 export async function getQuizQuestionsByQuizId({quizId}: {quizId: string}): Promise<Question[]> {
     const res = await fetch(`${ROOT_PATH}/quiz/questions/${quizId}`)
     return res.json();
+}
+
+
+type postQuizQuestionBodyType = {quizId:string, questions: Question[]} 
+export async function postQuizQuestion({ quizId, questions }: postQuizQuestionBodyType): Promise<ResponseError> {
+    revalidateTag("manage-quiz")
+    return await postFetch<postQuizQuestionBodyType>(`quiz/createAndUpdateQuestions`, {quizId, questions})
+}
+
+export async function postEditQuiz({quizId,  quizInfo }: { quizId?: string, quizInfo: Quiz}): Promise<ResponseError> {
+    revalidateTag("manage-quiz")
+    return await postFetch<Quiz>(`edit-quiz/${quizId}`, quizInfo)
 }

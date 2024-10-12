@@ -1,5 +1,5 @@
 "use client"
-import { IconButton, TextField, Tooltip } from "@mui/material";
+import { IconButton, TextField, Tooltip, Typography } from "@mui/material";
 import { Quiz, ActionValidationState } from "@/utils/type";
 import { ValidableQuestion } from "./QuestionsReducer";
 import Box from '@mui/material/Box';
@@ -10,11 +10,12 @@ import { questionsReducer } from "./QuestionsReducer"
 import QuestionEditableCard from "./QuestionEditableCard";
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SaveAsOutlinedIcon from '@mui/icons-material/SaveAsOutlined';
+import { ErrorSharp } from "@mui/icons-material";
 
 export default function QuizManagementForm({quizInfo, questions}: {quizInfo: Quiz, questions: ValidableQuestion[]}){
 
 
-    const [formState , formAction] = useFormState<ActionValidationState, FormData>(editQuiz.bind(null, quizInfo._id || ""), {
+    const [formState , formAction] = useFormState<ActionValidationState, FormData>(editQuiz.bind(null, quizInfo), {
         errors: {
             fieldErrors: {},
             formErrors: []
@@ -147,8 +148,18 @@ export default function QuizManagementForm({quizInfo, questions}: {quizInfo: Qui
                     </Box>
                 </Box>
 
+                <Box
+                    sx={{
+                        textAlign: "end",
+                        color:"var(--mui-palette-error-main)",
+                        marginTop: 1,
+                        display: formState?.errors!.formErrors!.length > 0 ? "block": "none"
+                    }}
+                >
+                    <Typography>{formState.errors?.formErrors?.join(",")}</Typography>
+                </Box>
                 {
-                    questionList.map((q,i) => (
+                    questionList.map((q) => (
                         <QuestionEditableCard
                             key={q._id}
                             question={q}

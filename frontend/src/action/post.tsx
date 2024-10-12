@@ -1,19 +1,20 @@
 "use server"
-import { getErrorsForField } from "@/utils/format-error";
 import { Quiz, ActionValidationState, Question } from "@/utils/type";
+import { redirect } from "next/navigation";
+import { isEmpty } from "lodash";
+import { postEditQuiz, postQuizQuestion } from "@/api/route";
+import { revalidatePath } from "next/cache";
 
-export async function editQuizInfo(prevState: any,formData: FormData) {
+export async function editQuizInfo(prevState: ActionValidationState,formData: FormData) {
     const title = formData.get("title");
     const desc = formData.get("description");
 
-    console.log("previous title ::: ", prevState.title)
-    console.log("new title  ::: ", title)
     // return Object.assign(prevState, {title, desc})
     return { ...prevState, title, description: desc };
 }
 
  
-function transformInput(input: any): Question[] {
+function transformInput(input: { [k: string]: FormDataEntryValue; }): Question[] {
     const questions: Question[] = [];
     const questionKeys = Object.keys(input);
   
@@ -34,32 +35,34 @@ function transformInput(input: any): Question[] {
   
       // Set the prompt, options, or answer based on the type
       if (type === 'prompt') {
-        question.prompt = input[key];
+        question.prompt = input[key] as string;
       } else if (type.startsWith('option')) {
         const optionIndex = parseInt(match[3]) - 1; // Convert option number to index
-        question.options[optionIndex] = input[key];
+        question.options[optionIndex] = input[key] as string;
       } else if (type === 'answer') {
-        question.answer = parseInt(input[key]);
+        question.answer = parseInt(input[key] as string);
       }
     }
     
-    for(let ele of questions){
+    for(const ele of questions){
         delete ele._id
     }
 
     return questions
 }
 
-export async function editQuiz(quizId: string,  prevState: ActionValidationState, formData: FormData): Promise<ActionValidationState>{
 
-    const title = formData.get("title");
-    const description = formData.get("description");
+/* eslint-disable @typescript-eslint/no-unused-vars */
+export async function editQuiz(quizInfo: Quiz,  prevState: ActionValidationState, formData: FormData): Promise<ActionValidationState>{
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
     
     const rawData = Object.fromEntries(formData.entries());
 
     const newQuestions = transformInput(rawData);
 
-    let errors = {
+    const errors = {
         fieldErrors: {},
         formErrors: []
     }
@@ -72,5 +75,39 @@ export async function editQuiz(quizId: string,  prevState: ActionValidationState
         errors.fieldErrors = {...errors.fieldErrors, description: "Description is required"};
     }
 
+    if(
+      !errors || !errors.fieldErrors || isEmpty(errors.fieldErrors)
+    ) {
+        
+        try {
+          const [errObj1, errObj2] = await Promise.all([
+            postEditQuiz({
+              quizId: quizInfo._id, 
+              quizInfo: {author: quizInfo.author, title , description }
+            }),
+            postQuizQuestion({
+              quizId: quizInfo._id || "",
+              questions: newQuestions
+            })
+          ])
+
+          const err = {...errObj1, ...errObj2}
+
+          if (!isEmpty(err)){
+            throw Error(errObj1.error + "" + errObj2.error);
+          }
+
+          errors.fieldErrors = [];
+        } catch (e){
+          console.log(e)
+          errors.fieldErrors = ["Form Submission failed ! Please try again later !"]
+        }
+        revalidatePath("/manage-quizes");
+        revalidatePath(`/manage-quizes/${quizInfo._id}`);
+        void redirect("/manage-quizes");
+
+    }
+
     return {errors}
 }
+/* eslint-disable @typescript-eslint/no-unused-vars */

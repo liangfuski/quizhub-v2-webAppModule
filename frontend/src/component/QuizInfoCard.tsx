@@ -1,7 +1,7 @@
-import { quiz } from "@/utils/type"
+import { Quiz } from "@/utils/type"
 import { Card, CardContent, Typography, Box } from "@mui/material";
 
-export default function QuizInfoCard({ title, description, author }: quiz) {
+export default function QuizInfoCard({ title, description, author }: Quiz) {
     // const theme = useTheme();
     return (
         <Card

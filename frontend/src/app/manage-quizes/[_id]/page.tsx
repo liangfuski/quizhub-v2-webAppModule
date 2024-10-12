@@ -6,11 +6,10 @@ export default async function QuizEditPage({ params} : { params: { _id: string }
     const quizId = params._id;
     const quizResponseList: Quiz[]  = await getQuizListByCondition({ quizId });
 
-    let quizInfo: Quiz; 
     if (quizResponseList.length != 1) {
         throw new Error("Quiz Not Found");
     }
-    [quizInfo] = quizResponseList; 
+    const [quizInfo] = quizResponseList; 
 
     const questionList: Question[] = await getQuizQuestionsByQuizId({quizId})
     return (

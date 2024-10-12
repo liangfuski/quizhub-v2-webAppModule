@@ -151,4 +151,6 @@ const QuestionEditableCard = memo(
     )
 });
 
+// Assign displayName for easier debugging
+QuestionEditableCard.displayName = "QuestionEditableCard";
 export default QuestionEditableCard;
